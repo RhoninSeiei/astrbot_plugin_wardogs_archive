@@ -1,0 +1,16 @@
+{
+  "service_base": "http://127.0.0.1:18761",
+  "service_token_file": "/run/secrets/wardogs_query",
+  "official_only": true,
+  "public_queries_enabled": true,
+  "official_query_scopes": [],
+  "official_admin_scopes": [],
+  "authorized_qq": [],
+  "official_qq_bindings": [],
+  "auto_execute": false,
+  "admin_kicks_enabled": false,
+  "auto_approve_joins_enabled": false,
+  "default_provider_id": "",
+  "assessment_provider_id": "",
+  "fallback_provider_id": ""
+}

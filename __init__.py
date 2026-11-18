@@ -1,0 +1,1 @@
+"""AstrBot WARDOGS plugin package."""

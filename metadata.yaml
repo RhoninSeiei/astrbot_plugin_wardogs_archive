@@ -1,0 +1,10 @@
+name: astrbot_plugin_wardogs
+display_name: WARDOGS 管理
+desc: 群成员自然语言举报、跨消息图片收集、证据审核与受限服务器管理
+version: v0.22.0
+author: RhoninSeiei
+repo: https://github.com/RhoninSeiei/astrbot_plugin_wardogs_archive
+support_platforms:
+  - aiocqhttp
+  - qq_official
+astrbot_version: ">=4.28.2,<5"

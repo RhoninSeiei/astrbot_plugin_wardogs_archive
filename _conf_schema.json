@@ -1,0 +1,252 @@
+{
+  "official_only": {
+    "type": "bool",
+    "default": false,
+    "hint": "仅保留QQ官方机器人。禁用本插件全部OneBot入口、群聊采集、OneBot启动探测和自动群公告；不修改AstrBot全局default适配器。当前生产启用。",
+    "description": "仅使用QQ官方机器人"
+  },
+  "admin_kicks_enabled": {
+    "type": "bool",
+    "default": false,
+    "hint": "群主、群管理员和面板明确授权的成员可以@机器人管理玩家。昵称候选及数字操作仍需原确认；授权不允许管理QQ群成员。",
+    "description": "启用群内人工管理"
+  },
+  "public_queries_enabled": {
+    "type": "bool",
+    "default": false,
+    "hint": "启用群成员@机器人只读查询人数、对局比分与服务器ID；不授予处罚或公告权限。",
+    "description": "允许群成员查询服况"
+  },
+  "official_menu_buttons_enabled": {
+    "type": "bool",
+    "default": true,
+    "hint": "响应@官方机器人“菜单”或“管理菜单”时尝试原生Markdown按钮；平台明确拒绝时返回文本菜单，结果未知不重发。按钮仍走原有角色及候选确认。",
+    "description": "显示官方机器人菜单按钮"
+  },
+  "authorized_qq": {
+    "type": "list",
+    "default": [],
+    "description": "额外授权的QQ号",
+    "hint": "每项填写一个真实QQ号。保留原群主与管理员权限；空列表不新增授权。QQ官方渠道还必须在下方绑定该QQ对应的精确平台身份；单独填写QQ号不会生效。权限仅限已经启用的管理群，操作继续保留原确认和审计。"
+  },
+  "official_qq_bindings": {
+    "type": "template_list",
+    "default": [],
+    "description": "QQ官方身份绑定",
+    "hint": "先在已启用的群@机器人发送“我的管理身份”，取得本人平台身份；再由管理者核对QQ后点击添加绑定。一条绑定仅作用于指定群和机器人，字段缺失、冲突或白名单移除时不授权。官方group_openid不是普通QQ群号。",
+    "templates": {
+      "qq_member": {
+        "name": "添加QQ授权绑定",
+        "hint": "由管理者核对QQ和官方身份后填写。",
+        "items": {
+          "qq": {
+            "type": "string",
+            "default": "",
+            "description": "真实QQ号",
+            "hint": "必须同时存在于上方QQ授权列表。官方事件不提供QQ号，需由管理者核对绑定；不能使用昵称或用户自述。"
+          },
+          "platform_id": {
+            "type": "string",
+            "default": "",
+            "description": "AstrBot平台实例ID"
+          },
+          "app_id": {
+            "type": "string",
+            "default": "",
+            "description": "官方机器人AppID"
+          },
+          "group_id": {
+            "type": "string",
+            "default": "",
+            "description": "目标群group_openid"
+          },
+          "member_id": {
+            "type": "string",
+            "default": "",
+            "description": "成员member_openid"
+          }
+        }
+      }
+    }
+  },
+  "default_provider_id": {
+    "type": "string",
+    "default": "阶越星辰/step-5-preview",
+    "description": "默认文字模型 LLM",
+    "_special": "select_provider",
+    "hint": "使用AstrBot已有模型供应商，供自然语言管理、服况意图和上下文检索使用。清空选择时继承当前会话默认模型。固定命令和数字确认仍优先走本地逻辑。"
+  },
+  "assessment_provider_id": {
+    "type": "string",
+    "default": "阶越星辰/step-5-preview",
+    "hint": "从AstrBot已配置的模型供应商选择，必须支持图片输入。清空选择时继承当前会话模型，请确认该模型支持图片。现有配置保持原模型；主模型失败或无法核验时使用下面的回退模型，原处罚门槛不变。",
+    "description": "图片识别与举报审核模型 VLM",
+    "_special": "select_provider"
+  },
+  "fallback_provider_id": {
+    "type": "string",
+    "default": "openai_oauth/gpt-6-luna",
+    "description": "回退模型",
+    "_special": "select_provider",
+    "hint": "主模型异常、格式无效或证据无法判定时补位；所有模型入口统一使用此选择。清空选择会关闭模型回退。图片审核的回退模型必须支持图片，原身份、时间、置信度和处罚权限校验保持。"
+  },
+  "official_admin_scopes": {
+    "type": "list",
+    "default": [],
+    "hint": "仅人工管理启用的官方机器人范围，每项格式 平台实例ID|应用AppID|group_openid，全部精确匹配。群号不能代替OpenID，空列表禁用官方人工管理。",
+    "description": "官方机器人管理群范围"
+  },
+  "official_query_scopes": {
+    "type": "list",
+    "default": [],
+    "hint": "官方机器人只读查询范围，每项 平台实例ID|AppID|group_openid，精确匹配；面向群内普通成员，仅响应@。与人工处罚范围独立。",
+    "description": "官方机器人公开查询群范围"
+  },
+  "auto_approve_joins_enabled": {
+    "type": "bool",
+    "default": false,
+    "hint": "自动批准指定官方机器人群的加群申请，要求机器人自身为群管理员；权限不足时等待。",
+    "description": "自动批准加群申请"
+  },
+  "official_join_scopes": {
+    "type": "list",
+    "default": [],
+    "hint": "允许自动审批的官方平台实例|AppID|group_openid；空列表不处理。独立于处罚权限。",
+    "description": "官方机器人加群审批范围"
+  },
+  "platform_id": {
+    "type": "string",
+    "default": "default",
+    "hint": "目标OneBot平台实例ID，必须与AstrBot实际实例精确一致；空值禁用。",
+    "description": "兼容通道：OneBot平台实例"
+  },
+  "bot_account_id": {
+    "type": "string",
+    "default": "",
+    "hint": "目标机器人QQ号；与OneBot事件self_id精确核对，空值禁用。",
+    "description": "兼容通道：机器人QQ号"
+  },
+  "allowed_groups": {
+    "type": "list",
+    "default": [],
+    "hint": "启用举报的OneBotQQ群号列表；群内所有成员均可举报。空列表不启用任何群。",
+    "description": "兼容通道：启用群号"
+  },
+  "collect_seconds": {
+    "type": "int",
+    "default": 8,
+    "hint": "图片收集固定等待秒数，范围5至10。",
+    "description": "图片收集等待秒数",
+    "slider": {
+      "min": 5,
+      "max": 10,
+      "step": 1
+    }
+  },
+  "auto_execute": {
+    "type": "bool",
+    "default": false,
+    "hint": "核验通过后自动提交踢出；真实模型与服务验收前保持关闭。",
+    "description": "证据通过后自动处罚"
+  },
+  "service_base": {
+    "type": "string",
+    "default": "http://127.0.0.1:18761",
+    "hint": "管理服务地址；容器内必须配置实际可达的专用服务地址。",
+    "description": "高级：管理服务地址"
+  },
+  "service_token_file": {
+    "type": "string",
+    "default": "",
+    "hint": "查询与公告服务令牌文件路径，令牌不填入本配置。",
+    "description": "高级：只读服务令牌文件"
+  },
+  "execution_token_file": {
+    "type": "string",
+    "default": "",
+    "hint": "受限踢出能力令牌文件路径；未配置不能提交踢出。",
+    "description": "高级：举报执行令牌文件"
+  },
+  "media_hosts": {
+    "type": "list",
+    "default": [
+      "gchat.qpic.cn",
+      "multimedia.nt.qq.com",
+      "multimedia.nt.qq.com.cn",
+      "c2cpicdw.qpic.cn"
+    ],
+    "hint": "允许的QQ图片精确域名；只允许HTTPS与公网解析，禁止任意URL。",
+    "description": "高级：允许的图片域名"
+  },
+  "rule_version": {
+    "type": "string",
+    "default": "1",
+    "hint": "服规版本，必须与服务执行配置一致。",
+    "description": "服规版本"
+  },
+  "outside_combat_rule": {
+    "type": "text",
+    "default": "交战双方任意一方在黄圈外即违规，包括圈外攻击圈内、圈内攻击圈外及双方圈外；只有双方圈内才不违反本条。证据必须对应目标身份、事件时间、圈内外依据和交战行为。完整死亡画面中完整清晰的小地图没有黄色区域或圆弧，表示视角玩家在圈外。HZ是距黄圈中心的距离，仅作辅助信息。",
+    "hint": "黄圈外交战的可核验服规。",
+    "description": "黄圈外交战规则"
+  },
+  "base_camping_rule": {
+    "type": "text",
+    "default": "",
+    "hint": "基地保护边界与压家定义；空值仍受理但不自动认定此规则。",
+    "description": "压家规则"
+  },
+  "cheating_rule": {
+    "type": "text",
+    "default": "禁止使用外挂。须有可核验的连续行为证据与目标身份关联，排除网络延迟、观战差异和合法机制。高KD、强枪法、单帧异常或重复指控不足以认定。",
+    "hint": "外挂证据判定规则。",
+    "description": "外挂判定规则"
+  },
+  "assessment_timeout_seconds": {
+    "type": "int",
+    "default": 180,
+    "hint": "每个审核模型各自的超时预算，30至300秒。主模型失败后，已启用的回退模型获得独立预算；超时不会直接处罚。",
+    "description": "单个审核模型超时秒数",
+    "slider": {
+      "min": 30,
+      "max": 300,
+      "step": 10
+    }
+  },
+  "startup_checks": {
+    "type": "bool",
+    "default": false,
+    "hint": "启用上线自检：核验OneBot账号及群成员关系、后端接口、独立令牌与名单时效；失败时拒绝初始化。正式部署启用。",
+    "description": "上线时检查服务连接"
+  },
+  "admin_execution_token_file": {
+    "type": "string",
+    "default": "",
+    "hint": "独立管理员处罚令牌文件；不得复用举报处罚令牌。",
+    "description": "高级：人工管理令牌文件"
+  },
+  "official_setup_platforms": {
+    "type": "list",
+    "default": [],
+    "hint": "临时会话核验入口，每项 平台实例ID|AppID。仅响应@机器人的 /wd 会话核验，只保存当前群标识与平台角色，不开放处罚；绑定完成后清空。",
+    "description": "高级：临时会话核验机器人"
+  },
+  "official_setup_challenge": {
+    "type": "string",
+    "default": "",
+    "hint": "临时会话核验口令，用于绑定目标群；命令为@机器人 /wd 会话核验 <口令>，核验完成后清空。此入口不开放处罚。",
+    "description": "高级：临时会话核验口令"
+  },
+  "server_identity_auto_notice_enabled": {
+    "type": "bool",
+    "default": false,
+    "hint": "自动检测服务器UUID变化并发布固定群公告。首次仅建立基准；未知提交不重放。官方QQ群公告接口尚未核验可用，当前限定现有OneBot精确群。",
+    "description": "兼容通道：服务器ID变化公告"
+  },
+  "server_identity_notice_group": {
+    "type": "string",
+    "default": "",
+    "hint": "自动服务器ID群公告的唯一QQ群号，必须属于当前OneBot allowed_groups；沿用platform_id和bot_account_id，禁止从官方OpenID或群名推测。",
+    "description": "兼容通道：公告目标群号"
+  }
+}
